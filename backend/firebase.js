@@ -1,12 +1,16 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+const admin = require('firebase-admin');
+require('dotenv').config();
+const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
-import dotenv from "dotenv";
-dotenv.config();
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: process.env.DATABASE_URL
+});
 
-const firebaseConfig = {
-    databaseURL: process.env.DATABASE_URL
-};
+const db = admin.database();
+const subscribersRef = db.ref('subscribers');
 
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+subscribersRef.push({
+  email: 'farhanfaiyazkhan@gmail.com',
+  timestamp: Date.now() 
+});
